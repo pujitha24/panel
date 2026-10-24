@@ -1025,7 +1025,8 @@ class AutocompleteInput(SingleSelectBase):
         if 'value' in params and not self.restrict and not isIn(params['value'], self.values):
             with param.parameterized.discard_events(self):
                 props = super()._process_param_change(params)
-                self.value = props['value'] = params['value']
+                self.value = params['value']
+                props['value'] = '' if params['value'] is None else str(params['value'])
         else:
             props = super()._process_param_change(params)
         return props
