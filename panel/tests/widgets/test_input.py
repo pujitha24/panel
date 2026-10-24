@@ -380,6 +380,22 @@ def test_datetime_input(document, comm):
         dt_input.value = datetime(2017, 12, 30)
 
 
+def test_datetime_input_only_start_out_of_bounds():
+    dt_input = DatetimeInput(value=datetime(2021, 1, 1), start=datetime(2020, 1, 1))
+
+    with pytest.raises(ValueError, match='on or after 2020-01-01'):
+        dt_input.value = datetime(2019, 1, 1)
+    assert dt_input.value == datetime(2021, 1, 1)
+
+
+def test_datetime_input_only_end_out_of_bounds():
+    dt_input = DatetimeInput(value=datetime(2019, 1, 1), end=datetime(2020, 1, 1))
+
+    with pytest.raises(ValueError, match='on or before 2020-01-01'):
+        dt_input.value = datetime(2021, 1, 1)
+    assert dt_input.value == datetime(2019, 1, 1)
+
+
 def test_datetime_range_input(document, comm):
     dt_input = DatetimeRangeInput(
         value=(datetime(2018, 1, 1), datetime(2018, 1, 3)),
